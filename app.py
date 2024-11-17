@@ -126,7 +126,6 @@ def generate_merit_text(client: OpenAI, merit_items: list, name: str, position: 
                        organization: str, department: str, years: str) -> dict:
     """Generate merit summary and details using OpenAI API"""
     try:
-        # 입력된 공적사항 중 실제 내용이 있는 항목만 필터링
         valid_merit_items = [item for item in merit_items if item.strip()]
         num_items = len(valid_merit_items)
         
@@ -142,7 +141,6 @@ def generate_merit_text(client: OpenAI, merit_items: list, name: str, position: 
         for i, item in enumerate(valid_merit_items, 1):
             context += f"{i}. {item}\n"
             
-        # 동적으로 출력 형식 생성
         output_format = """
             입력된 정보를 바탕으로 상세한 공적조서를 작성해주세요. 다음의 형식을 정확히 따라주세요.
             
@@ -151,7 +149,6 @@ def generate_merit_text(client: OpenAI, merit_items: list, name: str, position: 
 
             공적내용: """
             
-        # 입력된 공적사항 수만큼 섹션 형식 추가
         for i in range(1, num_items + 1):
             output_format += f"""
 
@@ -217,7 +214,6 @@ def main():
 
     st.markdown("<h1>공적조서 생성기 📜</h1>", unsafe_allow_html=True)
     
-    # Instructions
     st.markdown("""
     <div class="instructions">
         <h3>📝 사용 방법</h3>
@@ -236,7 +232,6 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Basic Information Section
     st.markdown('<div class="section-title">기본 정보</div>', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
@@ -247,10 +242,9 @@ def main():
         position = st.text_input("직위 💼", placeholder="직위를 입력하세요")
         years = st.text_input("재직기간 📅", placeholder="예: 2020.03.01 ~ 현재")
 
-    # Merit Items Section
+   
     st.markdown('<div class="section-title">공적 사항</div>', unsafe_allow_html=True)
     
-    # Add/Remove buttons
     col1, col2 = st.columns([1, 9])
     with col1:
         if st.button("➕ 항목 추가", key="add_merit"):
@@ -260,7 +254,6 @@ def main():
             if len(st.session_state.merit_items) > 1:
                 st.session_state.merit_items.pop()
 
-    # Merit items input fields
     merit_values = []
     for i, _ in enumerate(st.session_state.merit_items):
         merit_value = st.text_area(
